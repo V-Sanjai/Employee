@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Update Page</h1>
+<form>
+    <input type="hidden" name="employeenumber" id="employeenumber">
+    Employee Name:<input type="text" name="employeename" id="employeename">
+    Address line1:<input type="text" name="addressline1" id="addressline1">
+    Address line2:<input type="text" name="addressline2" id="addressline2">
+    City:<input type="text" name="city" id="city">
+    Zipcode:<input type="number" name="zipcode" id="zipcode">
+    <input type="button" value="Update" onclick="updateemployee()">
+</form>
+<script>
+    $(document).ready(function () {
+        var employeenumber = localStorage.getItem("id");
+        $.get('http://localhost:8080/employee/getby/' + employeenumber, function (employee) {
+            $('#employeenumber').val(employee.employeenumber);
+            $('#employeename').val(employee.employeename);
+            $('#addressline1').val(employee.addressline1);
+            $('#addressline2').val(employee.addressline2);
+            $('#city').val(employee.city);
+            $('#zipcode').val(employee.zipcode);
+        })
+    })
+
+    function updateemployee() {
+        var employeenumber = $('#employeenumber').val();
+        var employeename = $('#employeename').val();
+        var addressline1 = $('#addressline1').val();
+        var addressline2 = $('#addressline2').val();
+        var city = $('#city').val();
+        var zipcode = $('#zipcode').val();
+
+        var data = {
+            employeenumber: employeenumber,
+            employeename: employeename,
+            addressline1: addressline1,
+            addressline2: addressline2,
+            city: city,
+            zipcode: zipcode,
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/employee/update',
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function () {
+                window.location.href = "list.html";
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

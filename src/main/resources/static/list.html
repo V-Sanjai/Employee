@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>ListPage</h1>
+<form action="index.html">
+    <input type="submit" value="addemployee">
+</form>
+<br>
+<table border="2px" style="border: red">
+    <tr>
+        <th>Employee Number</th>
+        <th>Employee Name</th>
+        <th>Address line1</th>
+        <th>Address line2</th>
+        <th>City</th>
+        <th>Zipcode</th>
+        <th>Action</th>
+    </tr>
+    <tbody id="tbody">
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        allemployee();
+    })
+
+    function allemployee() {
+        $.ajax({
+            url: 'http://localhost:8080/employee/getallemployee',
+            type: 'GET',
+            success: function (employees) {
+                var tablebody = $('#tbody');
+                tablebody.empty();
+                employees.forEach(function (employee) {
+                    var table = '<tr>' +
+                        '<td>' + employee.employeenumber + '</td>' +
+                        '<td>' + employee.employeename + '</td>' +
+                        '<td>' + employee.addressline1 + '</td>' +
+                        '<td>' + employee.addressline2 + '</td>' +
+                        '<td>' + employee.city + '</td>' +
+                        '<td>' + employee.zipcode + '</td>' +
+                        '<td>' +
+                        '<button onclick="updateemployee(' + employee.employeenumber + ')">update</button>' +
+                        '<button onclick="deleteemployee(' + employee.employeenumber + ')">delete</button>' +
+                        '</td>' +
+                        '</tr>';
+
+                    tablebody.append(table);
+                })
+            }
+        })
+    }
+
+    function deleteemployee(id) {
+        if (confirm("Do you want to confirm delete?")) {
+            $.ajax({
+                url: 'http://localhost:8080/employee/deleteby/' + id,
+                type: 'DELETE',
+                success: function () {
+                    allemployee();
+
+                }
+            })
+        }
+    }
+
+    function updateemployee(id) {
+        if (confirm("Do you want to update the record?")) {
+            localStorage.setItem("id", id);
+            window.location.href = "update.html";
+        }
+    }
+
+
+</script>
+</body>
+</html>

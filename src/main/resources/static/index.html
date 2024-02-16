@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h1> Add Employee</h1>
+<form>
+    <input type="hidden" name="employeenumber" id="employeenumber">
+    Employee Name:<input type="text" name="employeename" id="employeename">
+    Address line1:<input type="text" name="addressline1" id="addressline1">
+    Address line2:<input type="text" name="addressline2" id="addressline2">
+    City:<input type="text" name="city" id="city">
+    Zipcode:<input type="number" name="zipcode" id="zipcode">
+    <input type="button" value="add" onclick="insert()">
+</form>
+<form action="list.html">
+    <input type="submit" value="list">
+</form>
+<script>
+    function insert() {
+        var employeenumber = $('#employeenumber').val();
+        var employeename = $('#employeename').val();
+        var addressline1 = $('#addressline1').val();
+        var addressline2 = $('#addressline2').val();
+        var city = $('#city').val();
+        var zipcode = $('#zipcode').val();
+
+        if(!employeename||!addressline1||!addressline2||!city||!zipcode){
+            alert("All fields are Mandatory!...!!!")
+            return;
+        }
+
+        var data = {
+            employeenumber: employeenumber,
+            employeename: employeename,
+            addressline1: addressline1,
+            addressline2: addressline2,
+            city: city,
+            zipcode: zipcode,
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/employee/addemployee',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function () {
+                window.location.href = "list.html";
+            }
+        });
+    }
+</script>
+</body>
+</html>
